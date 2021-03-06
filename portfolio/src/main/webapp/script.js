@@ -37,3 +37,20 @@ async function showGreetingMessage() {
     const introContainer = document.getElementById('intro-container');
     introContainer.innerText = textFromResponse;
 }
+
+
+async function randomGreeting() {
+    // Send a request to /my-data-url.
+    const responseFromServer = await fetch('/intro');
+
+    // Parse the response as JSON.
+    const myObject = await responseFromServer.json();
+
+    const greetingContainer = document.getElementById('greeting-container');
+    //greetingContainer.innerText = myObject;
+
+    // Now we can reference the fields in myObject!
+    console.log(myObject);
+    console.log("random greeting succesful");
+}
+
