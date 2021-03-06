@@ -19,7 +19,10 @@
 **/
 function addRandomFact() {
   const facts =
-      ["I've lived in three different countries", "I'm a vegetarian", "My favorite Sunday activity is watching Formula 1", "I love cooking and doing yoga"];
+      ["I've lived in three different countries", 
+      "I'm a vegetarian", 
+      "My favorite Sunday activity is watching Formula 1", 
+      "I love cooking and doing yoga"];
 
   // Pick a random greeting.
   const fact = facts[Math.floor(Math.random() * facts.length)];
