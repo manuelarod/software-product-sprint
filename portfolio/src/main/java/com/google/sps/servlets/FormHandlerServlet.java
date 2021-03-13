@@ -1,5 +1,10 @@
 package com.google.sps.servlets;
 
+import com.google.cloud.datastore.Datastore;
+import com.google.cloud.datastore.DatastoreOptions;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.FullEntity;
+import com.google.cloud.datastore.KeyFactory;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,22 +17,29 @@ public class FormHandlerServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // Get the value entered in the form.
     String textValue = request.getParameter("text-input");
+    String messageValue = request.getParameter("message-input");
 
-    // Print the value so you can see it in the server logs.
-    System.out.println("You submitted the email address: " + textValue);
+    String text1 = "You submitted the email address: " + textValue;
+    String text2 = "You sumbitted the message: " + messageValue;
 
-    // Write the value to the response so the user can see it.
-    response.getWriter().println("You submitted the email address: " + textValue);
+    writeToResponse(response,text1);
+    writeToResponse(response,text2);
 
-    // Get the value entered in the form.
-    String message = request.getParameter("message-input");
+    Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+    KeyFactory keyFactory = datastore.newKeyFactory().setKind("Task");
+    FullEntity taskEntity =
+        Entity.newBuilder(keyFactory.newKey())
+            .set("email", textValue)
+            .set("message", messageValue)
+            .build();
+    datastore.put(taskEntity);
 
-    // Print the value so you can see it in the server logs.
-    System.out.println("You submitted the message: " + message);
+    response.sendRedirect("/index.html");
+  }
 
-    // Write the value to the response so the user can see it.
-    response.getWriter().println("You submitted the message: " + message);
+  private void writeToResponse(HttpServletResponse response, String text) throws IOException {
+    System.out.println(text);
+    response.getWriter().println(text);
   }
 }
